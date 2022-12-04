@@ -1,6 +1,11 @@
+import 'dart:developer';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -48,6 +53,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // final CacheClient _cache = CacheClient();
   int _counter = 0;
 
   void _incrementCounter() {
@@ -105,11 +111,49 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              // _cache.write(key: "value", value: "abc");
+            },
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              // final value = _cache.read(key: "value");
+              log("value");
+            },
+            tooltip: 'Decrement',
+            child: const Icon(Icons.read_more),
+          ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+
+// class CacheClient {
+//   /// {@macro cache_client}
+//   CacheClient() : _cache = <String, Object>{};
+
+//   final Map<String, Object> _cache;
+
+//   /// Writes the provide [key], [value] pair to the in-memory cache.
+//   void write<T extends Object>({required String key, required T value}) {
+//     _cache[key] = value;
+//   }
+
+//   /// Looks up the value for the provided [key].
+//   /// Defaults to `null` if no value exists for the provided key.
+//   T? read<T extends Object>({required String key}) {
+//     final value = _cache[key];
+//     if (value is T) return value;
+//     return null;
+//   }
+// }
